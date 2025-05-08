@@ -16,7 +16,7 @@ resource "aws_vpc" "prod-vpc" {
 
 resource "aws_subnet" "prt-public-subnet" {
   vpc_id = "${aws_vpc.prod-vpc.id}"
-  cider_block = "10.0.8.0/21"
+  cidr_block = "10.0.8.0/21"
   map_public_ip_on_launch = "true"
   availability_zone = "us-east-1a"
   tags ={
@@ -35,7 +35,7 @@ resource "aws_route_table" "prt-public-rt" {
     vpc_id = "${aws_vpc.prod-vpc.id}" 
     route {
     cidr_block = "0.0.0.0/0"
-    internet_gateway_id = "${aws_internet_gateway.prt-igw.id}" 
+    gateway_id = "${aws_internet_gateway.prt-igw.id}" 
     }  
     tags ={
       Name = "prt-public-rt"
@@ -68,10 +68,10 @@ resource "aws_security_group" "prt-project-sg" {
 
   
 resource "aws_instance" "instance1" {
-  ami_id = "ami-0f9de6e2d2f067fca"
+  ami = "ami-0f9de6e2d2f067fca"
   instance_type = "t2.micro"
   key_name = "VirginiaKey"
-  vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
   tags ={
     Name = "Prt-ec2-instance-1"
@@ -79,10 +79,10 @@ resource "aws_instance" "instance1" {
 }
 
 resource "aws_instance" "instance2" {
-  ami_id = "ami-0f9de6e2d2f067fca"
+  ami = "ami-0f9de6e2d2f067fca"
   instance_type = "t2.micro"
   key_name = "VirginiaKey"
-  vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
   tags ={
     Name = "Prt-ec2-instance-2"
@@ -90,10 +90,10 @@ resource "aws_instance" "instance2" {
 }
 
 resource "aws_instance" "instance3" {
-  ami_id = "ami-0f9de6e2d2f067fca"
+  ami = "ami-0f9de6e2d2f067fca"
   instance_type = "t2.micro"
   key_name = "VirginiaKey"
-  vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
   tags ={
     Name = "Prt-ec2-instance-3"
