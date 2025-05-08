@@ -8,9 +8,8 @@ resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support = "true" 
   enable_dns_hostnames = "true"
-  enable_classiclink = "false"
   instance_tenancy = "default"
-  tags {
+  tags ={
     Name = "prt-vpc"
   }
 }
@@ -20,14 +19,14 @@ resource "aws_subnet" "prt-public-subnet" {
   cider_block = "10.0.8.0/21"
   map_public_ip_on_launch = "true"
   availability_zone = "us-east-1a"
-  tags {
+  tags ={
     Name = "prt-public-subnet"
   }
 }
 
 resource "aws_internet_gateway" "prt-igw" {
   vpc_id = "${aws_vpc.prod-vpc.id}"
-  tags {
+  tags ={
     Name = "prt-igw"
   }
 }
@@ -38,7 +37,7 @@ resource "aws_route_table" "prt-public-rt" {
     cidr_block = "0.0.0.0/0"
     internet_gateway_id = "${aws_internet_gateway.prt-igw.id}" 
     }  
-    tags {
+    tags ={
       Name = "prt-public-rt"
     }
 }
@@ -62,7 +61,7 @@ resource "aws_security_group" "prt-project-sg" {
       protocol = -1
       cidr_blocks = ["0.0.0.0/0"]
     }
-    tags {
+    tags ={
       Name = "prt-project-sg"
     }
 }
@@ -74,7 +73,7 @@ resource "aws_instance" "instance1" {
   key_name = "VirginiaKey"
   vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
-  tags {
+  tags ={
     Name = "Prt-ec2-instance-1"
   }
 }
@@ -85,7 +84,7 @@ resource "aws_instance" "instance2" {
   key_name = "VirginiaKey"
   vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
-  tags {
+  tags ={
     Name = "Prt-ec2-instance-2"
   }
 }
@@ -96,7 +95,7 @@ resource "aws_instance" "instance3" {
   key_name = "VirginiaKey"
   vpc_security_group_id = "${aws_security_group.prt-project-sg.id}"
   subnet_id = "${aws_subnet.prt-public-subnet.id}"
-  tags {
+  tags ={
     Name = "Prt-ec2-instance-3"
   }
 }
