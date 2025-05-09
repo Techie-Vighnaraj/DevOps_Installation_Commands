@@ -1,0 +1,21 @@
+---
+- name: installing java and jenkins in master
+  hosts: localhost
+  become: true
+  tasks: 
+    - name: executing script
+      script: red.sh
+
+- name: installing java and kubernetes in km
+  hosts: KM
+  become: true
+  tasks:
+    - name: executing script
+      script: yellow.sh
+
+- name: installing kubernetes in ks
+  hosts: KS
+  become: true
+  tasks:
+    - name: executing script
+      script: green.sh
