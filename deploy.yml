@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment
+  labels:
+    app: apache
+spec:
+  replicas: 5
+  selector:
+    matchlabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec: 
+      containers:
+      - name: mydeploymentcont
+        image: techievighnaraj650/prt-task:latest
+        ports:
+        - containerPort: 80
