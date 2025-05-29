@@ -1,0 +1,14 @@
+apiVersion:
+kind:
+metadata:
+  name: app1-nodeportservice
+spec:
+  selector:
+    app: my-app
+  type: NodePort
+  ports:
+    - protocl: TCP
+      port: 8080
+      targetPort: 80
+      nodePort: 30080
+  
