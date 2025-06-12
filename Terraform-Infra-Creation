@@ -99,3 +99,14 @@ resource "aws_instance" "instance3" {
     Name = "Prt-ec2-instance-3"
   }
 }
+
+resource "aws_instance" "instance4" {
+  ami = "ami-0f9de6e2d2f067fca"
+  instance_type = "t2.micro"
+  key_name = "VirginiaKey"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
+  subnet_id = "${aws_subnet.prt-public-subnet.id}"
+  tags ={
+    Name = "Prt-ec2-instance-4"
+  }
+}
