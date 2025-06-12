@@ -1,0 +1,101 @@
+provider "aws" {
+  region = "us-east-1"
+  access_key = ""
+  secret_key = ""
+}
+
+resource "aws_vpc" "prod-vpc" {
+  cidr_block = "10.0.0.0/16"
+  enable_dns_support = "true" 
+  enable_dns_hostnames = "true"
+  instance_tenancy = "default"
+  tags ={
+    Name = "prt-vpc"
+  }
+}
+
+resource "aws_subnet" "prt-public-subnet" {
+  vpc_id = "${aws_vpc.prod-vpc.id}"
+  cidr_block = "10.0.8.0/21"
+  map_public_ip_on_launch = "true"
+  availability_zone = "us-east-1a"
+  tags ={
+    Name = "prt-public-subnet"
+  }
+}
+
+resource "aws_internet_gateway" "prt-igw" {
+  vpc_id = "${aws_vpc.prod-vpc.id}"
+  tags ={
+    Name = "prt-igw"
+  }
+}
+
+resource "aws_route_table" "prt-public-rt" {
+    vpc_id = "${aws_vpc.prod-vpc.id}" 
+    route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.prt-igw.id}" 
+    }  
+    tags ={
+      Name = "prt-public-rt"
+    }
+}
+
+resource "aws_route_table_association" "prt-rta-public-subnet-1" {
+    subnet_id = "${aws_subnet.prt-public-subnet.id}"
+    route_table_id = "${aws_route_table.prt-public-rt.id}"
+}
+
+resource "aws_security_group" "prt-project-sg" {
+    vpc_id = "${aws_vpc.prod-vpc.id}"
+    egress {
+      from_port = 0
+      to_port = 0
+      protocol = -1
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress {
+      from_port = 0
+      to_port = 0
+      protocol = -1
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags ={
+      Name = "prt-project-sg"
+    }
+}
+
+  
+resource "aws_instance" "instance1" {
+  ami = "ami-0f9de6e2d2f067fca"
+  instance_type = "t2.micro"
+  key_name = "VirginiaKey"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
+  subnet_id = "${aws_subnet.prt-public-subnet.id}"
+  tags ={
+    Name = "Prt-ec2-instance-1"
+  }
+}
+
+resource "aws_instance" "instance2" {
+  ami = "ami-0f9de6e2d2f067fca"
+  instance_type = "t2.micro"
+  key_name = "VirginiaKey"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
+  subnet_id = "${aws_subnet.prt-public-subnet.id}"
+  tags ={
+    Name = "Prt-ec2-instance-2"
+  }
+}
+
+resource "aws_instance" "instance3" {
+  ami = "ami-0f9de6e2d2f067fca"
+  instance_type = "t2.micro"
+  key_name = "VirginiaKey"
+  vpc_security_group_ids = [aws_security_group.prt-project-sg.id]
+  subnet_id = "${aws_subnet.prt-public-subnet.id}"
+  tags ={
+    Name = "Prt-ec2-instance-3"
+  }
+}
